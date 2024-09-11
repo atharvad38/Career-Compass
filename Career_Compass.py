@@ -1,0 +1,81 @@
+import os
+import fitz  # PyMuPDF for PDF processing
+import streamlit as st
+from groq import Groq
+from docx import Document  # Library to handle DOCX files
+import nltk
+
+# Download NLTK resources (run once)
+nltk.download('punkt')
+
+# Streamlit application title and description
+st.title("Career Compass")
+st.write("### Upload your resume and specify the job title to get a professional score tailored to your target role.")
+
+# Streamlit input field for job title
+job_title = st.text_input("Enter the job title for which you want to rate your resume (e.g., Data Scientist, Software Engineer, Marketing Head etc) :")
+
+# Streamlit file uploader for PDF or DOCX files
+uploaded_file = st.file_uploader("Upload your resume (PDF or DOCX)", type=["pdf", "docx"])
+
+# Function to extract text from PDF
+def extract_text_from_pdf(pdf_path):
+    """Extract text from a PDF file using PyMuPDF (fitz)."""
+    doc = fitz.open(pdf_path)
+    text = ""
+    for page_num in range(doc.page_count):
+        page = doc.load_page(page_num)
+        text += page.get_text()
+    doc.close()
+    return text
+
+# Function to extract text from DOCX
+def extract_text_from_docx(docx_path):
+    """Extract text from a DOCX file using python-docx."""
+    doc = Document(docx_path)
+    text = []
+    for para in doc.paragraphs:
+        text.append(para.text)
+    return '\n'.join(text)
+
+# Function to score the resume with Groq
+def score_resume_with_groq(text, job_title):
+    """Send resume data to Groq API for scoring."""
+    client = Groq(
+        api_key="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",  # Replace with your actual Groq API key
+    )
+
+    prompt = f"Give me a resume score for this resume with a focus on an ideal candidate for the role of {job_title}. Provide a score out of 10 for the overall quality of the resume and a one-line description and also give recommended job title:. Format: Resume score: x/10\nDescription: (1 line):\n\n{text}\n\nRecommended Job Title:"
+
+    chat_completion = client.chat.completions.create(
+        messages=[
+            {
+                "role": "user",
+                "content": prompt,
+            }
+        ],
+        model="llama3-8b-8192",
+    )
+
+    return chat_completion.choices[0].message.content.strip()
+
+if uploaded_file and job_title:
+    # Determine file type and extract text accordingly
+    if uploaded_file.type == "application/pdf":
+        resume_text = extract_text_from_pdf(uploaded_file)
+    elif uploaded_file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+        resume_text = extract_text_from_docx(uploaded_file)
+    else:
+        st.error("Unsupported file type. Please upload a PDF or DOCX file.")
+
+    # Check if resume text was extracted successfully
+    if resume_text:
+        st.write("Processing your resume for the role of", job_title, "... Please wait.")
+        # Get the resume score using Groq API
+        score = score_resume_with_groq(resume_text, job_title)
+        st.write(f"**Resume Score:** {score}")
+    else:
+        st.error("Failed to extract text from the uploaded resume.")
+else:
+    st.info("Please upload a resume and enter the job title.")
+
