@@ -1,5 +1,5 @@
-os-sys
-PyMuPDF
-streamlit
-groq
-python-docx
+streamlit==1.38.0
+pymupdf==1.22.5
+python-docx==0.8.11
+nltk==3.10
+groq==0.2.0  # Replace with the actual version used
