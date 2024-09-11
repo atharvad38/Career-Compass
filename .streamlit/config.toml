@@ -1,1 +1,32 @@
+[server]
+headless = true
+port = 8501
+enableCORS = false
+enableXsrfProtection = false
+
+# Enable sharing the app on a public link
+enableWebsocketCompression = false
+
+[browser]
+gatherUsageStats = false  # Disable Streamlit usage stats gathering
+
+# Customize the title and favicon in the browser tab
+title = "Career Compass"
+favicon = "path/to/favicon.ico"  # You can provide a path to your custom favicon
+
+[theme]
+# Customize your app's appearance
+primaryColor = "#4CAF50"  # A suitable color for the app's primary theme
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F0F2F6"
+textColor = "#262730"
+font = "sans serif"
+
+[runner]
+# Max allowed script run time, set to 0 for unlimited
+magicEnabled = true
+
+[logger]
+# Control the log level: "error", "warning", "info", "debug"
+level = "info"
 
