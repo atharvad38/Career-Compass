@@ -1,6 +1,4 @@
-Here is a README file for your Career Compass project:
 
----
 
 # Career Compass
 
@@ -82,6 +80,4 @@ This project is licensed under the MIT License.
 
 
 
----
 
-Feel free to modify any part to better fit your project's structure or goals!
