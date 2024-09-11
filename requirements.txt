@@ -1,0 +1,5 @@
+os-sys
+PyMuPDF
+streamlit
+groq
+python-docx
