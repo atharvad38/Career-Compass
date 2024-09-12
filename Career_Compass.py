@@ -130,7 +130,7 @@ def score_resume_with_groq(text, job_title):
         api_key="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",  # Replace with your actual Groq API key
     )
 
-    prompt = f"Give me a resume score for this resume with a focus on an ideal candidate for the role of {job_title}. Provide a score out of 10 for the overall quality of the resume and a one-line description and also give recommended job title:. Format: Resume score: x/10\nDescription: (1 line):\n\n{text}\n\nRecommended Job Title:"
+    prompt = f"Give me a resume score for this resume with a focus on an ideal candidate for the role of {job_title}. Provide a score out of 10 for the overall quality of the resume and a one-line description and also give recommended job title:Don't hesitate to give less score if job title ({job_title}) and the resume are not at all related. Format: Resume score: x/10\nDescription: (1 line):\n\n{text}\n\nRecommended Job Title:"
 
     chat_completion = client.chat.completions.create(
         messages=[
